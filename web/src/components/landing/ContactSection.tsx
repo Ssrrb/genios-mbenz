@@ -12,7 +12,7 @@ export default function ContactSection() {
         <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
           <div>
             <h3 className="font-bold text-lg">Dirección</h3>
-            <p className="text-gray-600">Av. Mcal. Lopez 1234, Asunción</p>
+            <p className="text-gray-600">Solano Lopez 1024, Esq. Amistad</p>
           </div>
           <div>
             <h3 className="font-bold text-lg">Teléfono</h3>
@@ -20,7 +20,7 @@ export default function ContactSection() {
           </div>
           <div>
             <h3 className="font-bold text-lg">Correo Electrónico</h3>
-            <p className="text-gray-600">service@geniosmbenz.com.py</p>
+            <p className="text-gray-600">bernardo.peyrat@gmail.com</p>
           </div>
         </div>
       </div>

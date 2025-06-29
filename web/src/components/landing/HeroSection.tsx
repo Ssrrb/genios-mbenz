@@ -14,12 +14,18 @@ export default function HeroSection() {
           Cuidado Experto para tu Mercedes Benz
         </h1>
         <p className="mt-4 max-w-2xl">
-          Experimentá un servicio y mantenimiento sin igual para tu Mercedes
-          Benz en nuestras instalaciones de vanguardia en Asunción. Nuestros
-          técnicos certificados utilizan solo piezas genuinas y el equipo de
-          diagnóstico más reciente para asegurar que tu vehículo funcione al
-          máximo.
+          Ofrecemos un servicio y mantenimiento de alta calidad para tu Mercedes
+          Benz con nuestros técnicos y años de experiencia. Te aseguramos que
+          tu auto funcione al máximo con piezas genuinas y tratado profesional de confianza garantizado.
         </p>
+        <a 
+          href="https://wa.me/595981555966?text=Hola%20quisiera%20arreglar%20mi%20Mercedes"
+          target="_blank" 
+          rel="noopener noreferrer"
+          className="mt-8 px-6 py-2 rounded-full bg-[#141414] text-white hover:bg-[#141414]/80 transition-colors inline-block"
+        >
+          Reserva tu cita
+        </a>
       </div>
     </section>
   );
