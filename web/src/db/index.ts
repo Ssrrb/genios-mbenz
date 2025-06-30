@@ -1,5 +1,5 @@
 import { drizzle } from 'drizzle-orm/neon-http';
-import { NeonQueryFunction } from '@neondatabase/serverless';
+
 
 // Ensure DATABASE_URL exists with a default if not provided
 const connectionString = process.env.DATABASE_URL || '';

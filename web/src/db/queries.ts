@@ -1,35 +1,27 @@
 import 'server-only';
 
 import {
-  and,
-  asc,
-  count,
-  desc,
   eq,
-  gt,
-  gte,
-  inArray,
-  lt,
-  type SQL,
 } from 'drizzle-orm';
 import { drizzle } from 'drizzle-orm/postgres-js';
 import postgres from 'postgres';
 
 import {
-  user, 
-  type User,
+  user,
 } from './schema';
-import { generateUUID } from '../utils';
+import { generateUUID } from '../lib/utils';
 import { generateHashedPassword } from './utils';
 
 // biome-ignore lint: Forbidden non-null assertion.
 const client = postgres(process.env.POSTGRES_URL!);
 const db = drizzle(client);
 
+type User = typeof user.$inferSelect;
+
 export async function getUser(email: string): Promise<Array<User>> {
   try {
     return await db.select().from(user).where(eq(user.email, email));
-  } catch (error) {
+  } catch {
     throw new Error('Failed to get user by email');
   }
 }
@@ -39,7 +31,7 @@ export async function createUser(email: string, password: string) {
 
   try {
     return await db.insert(user).values({ email, password: hashedPassword });
-  } catch (error) {
+  } catch {
     throw new Error('Failed to create user');
   }
 }
@@ -53,7 +45,7 @@ export async function createGuestUser() {
       id: user.id,
       email: user.email,
     });
-  } catch (error) {
+  } catch {
     throw new Error('Failed to create guest user');
   }
 }

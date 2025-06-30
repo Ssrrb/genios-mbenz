@@ -1,5 +1,5 @@
 import { db } from "./index";
-import { testimonialsTable } from "./schema";
+
 
 async function createTestimonialsTable() {
   try {

@@ -3,7 +3,7 @@ import React from 'react';
 interface ServiceCardProps {
   title: string;
   description: string;
-  imageUrl: string;
+  imageUrl?: string;
 }
 
 export default function ServiceCard({ title, description, imageUrl }: ServiceCardProps) {

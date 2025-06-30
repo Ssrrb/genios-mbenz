@@ -1,7 +1,9 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+
 import { SessionProvider } from 'next-auth/react';
+
 import { Toaster } from '@/components/ui/sonner';
 
 const geistSans = Geist({
@@ -15,17 +17,18 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://geniosmbenz.com"),
   title: "Genios MBenz | Taller Especializado en Mercedes Benz en Paraguay",
   description: "Servicio profesional de diagnóstico, mantenimiento y reparación para vehículos Mercedes Benz en Paraguay. Técnicos certificados, repuestos originales y soluciones integrales para todas las series.",
-  keywords: "taller Mercedes Benz, reparación Mercedes Paraguay, servicio Mercedes, taller especializado, repuestos originales Mercedes, diagnóstico computarizado, mecánica Mercedes Asunción, mantenimiento sedan Mercedes, reparación SUV Mercedes, clase A, clase C, clase E, clase S, GLA, GLC, GLE, Sprinter",
+  keywords: "taller Mercedes Benz, reparación Mercedes Paraguay, servicio Mercedes, taller especializado, repuestos originales Mercedes, diagnóstico computarizado, mecánico Mercedes Asunción, mantenimiento sedan Mercedes, reparación SUV Mercedes, clase A, clase C, clase E, clase S, GLA, GLC, GLE, Sprinter",
   authors: [{ name: "Genios MBenz" }],
-  category: "Automotive Services",
+  category: "Servicios Automotrices",
   openGraph: {
     title: "Genios MBenz | Especialistas en Reparación de Mercedes Benz en Paraguay",
     description: "Taller especializado en diagnóstico, mantenimiento y reparación de vehículos Mercedes Benz con técnicos certificados y repuestos originales en Paraguay.",
-    url: "https://geniosmbenz.com.py",
+    url: "https://geniosmbenz.com",
     siteName: "Genios MBenz",
-    locale: "es_PY",
+    locale: "es",
     type: "website",
     images: [
       {
@@ -43,7 +46,7 @@ export const metadata: Metadata = {
     images: ["/mercedes-benz-svgrepo-com.svg"],
   },
   alternates: {
-    canonical: "https://geniosmbenz.com.py",
+    canonical: "https://geniosmbenz.com",
   },
   robots: {
     index: true,
@@ -53,10 +56,11 @@ export const metadata: Metadata = {
       follow: true,
     },
   },
-  viewport: {
-    width: "device-width",
-    initialScale: 1,
-  },
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
 };
 
 export default function RootLayout({
@@ -65,7 +69,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="es">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
