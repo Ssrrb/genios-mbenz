@@ -1,0 +1,16 @@
+# .dockerignore
+
+# Ignore the .env file to prevent it from being included in the Docker image.
+# Environment variables will be set securely in Cloud Run.
+.env
+
+# Ignore Node.js modules, as they are installed within the Docker stages.
+node_modules
+
+# Ignore build artifacts that are generated within the Docker build.
+.next
+
+# Ignore local development and Git-related files.
+.git
+.gitignore
+npm-debug.log

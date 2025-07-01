@@ -1,62 +1,60 @@
 # Dockerfile for Next.js App
 
-# 1. Dependencies Stage: Install dependencies
+# 1. Build Stage: Install dependencies and build the application
 # Use a specific Node.js version for consistency. Alpine is a lightweight version.
-FROM node:20-alpine AS deps
-# Check https://github.com/nodejs/docker-node/tree/b4117f9333da4138b03a546ec926ef50a31506c3#nodealpine to understand why libc6-compat might be needed.
-RUN apk add --no-cache libc6-compat
+FROM node:20-alpine AS build
 WORKDIR /app
 
-# Copy package.json and the lockfile.
+# Install dependencies -- 'libc6-compat' is for compatibility with some native modules.
+RUN apk add --no-cache libc6-compat
+
+# Copy package files and install all dependencies.
 COPY package.json package-lock.json* ./
-# Install all dependencies, including devDependencies needed for the build.
 RUN npm install
 
-# 2. Builder Stage: Build the application
-FROM node:20-alpine AS builder
-WORKDIR /app
-# Copy dependencies from the 'deps' stage.
-COPY --from=deps /app/node_modules ./node_modules
 # Copy the rest of the application source code.
 COPY . .
 
 # Disable Next.js telemetry during the build.
 ENV NEXT_TELEMETRY_DISABLED 1
 
-# Build the Next.js application.
-# The 'standalone' output mode (set in next.config.ts) creates a minimal server.
+# Provide a dummy DATABASE_URL at build time to allow the build to succeed.
+# The actual secret will be injected by Cloud Run at runtime.
+ENV DATABASE_URL="postgresql://dummy:dummy@dummy/dummy?sslmode=require"
+
+# Build the Next.js application for production with 'standalone' output.
+# Ensure `output: 'standalone'` is in your next.config.mjs file.
 RUN npm run build
 
-# 3. Runner Stage: Create the final, small production image
+# 2. Runner Stage: Create the final, small, and secure production image
 FROM node:20-alpine AS runner
 WORKDIR /app
 
 # Set the environment to production.
 ENV NODE_ENV=production
-# Disable Next.js telemetry during runtime.
+# Disable Next.js telemetry for the running application.
 ENV NEXT_TELEMETRY_DISABLED 1
 
-# Create a non-root user for better security.
+# Create a non-root user for security purposes.
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
 
-# Copy the standalone output from the builder stage.
-# This includes the server and all necessary files.
-COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
-# Copy the public folder for static assets.
-COPY --from=builder --chown=nextjs:nodejs /app/public ./public
-# Copy the static assets from the .next/static folder.
-COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
+# Copy only the necessary standalone files from the build stage.
+COPY --from=build --chown=nextjs:nodejs /app/.next/standalone ./
+# Copy public assets.
+COPY --from=build --chown=nextjs:nodejs /app/public ./public
+# Copy static build assets.
+COPY --from=build --chown=nextjs:nodejs /app/.next/static ./.next/static
 
 # Switch to the non-root user.
 USER nextjs
 
-# Expose the port the app will run on. Cloud Run will automatically use this.
+# Expose the port the app will run on.
+# Cloud Run automatically uses the PORT environment variable.
 EXPOSE 3000
 
-# Set the PORT environment variable.
+# Set the PORT environment variable for Cloud Run.
 ENV PORT 3000
 
 # The command to start the application.
-# The server.js file is part of the 'standalone' output.
 CMD ["node", "server.js"]
